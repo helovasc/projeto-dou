@@ -60,7 +60,7 @@ def procura_termos(conteudo_raspado):
 
 def salva_na_base(palavras_raspadas):
   print('Salvando palavras na base de dados...')
-  arquivo_credencials = os.getenv('CHAVE_EMAIL')
+  arquivo_credencials = os.getenv('CHAVE_CREDENCIAIS')
   conta = ServiceAccountCredentials.from_json_keyfile_name(arquivo_credencials)
   api = gspread.authorize(conta)
   planilha = api.open_by_key('1cSPu6t84C8j_nI6UZXzkbmCwdFPmQWeyd9giVAtzLrQ')
