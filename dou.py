@@ -60,7 +60,7 @@ def procura_termos(conteudo_raspado):
 
 def salva_na_base(palavras_raspadas):
   print('Salvando palavras na base de dados...')
-  arquivo_credencials = 'busca-dou-da7b860668be.json'
+  arquivo_credencials = os.getenv('CHAVE_EMAIL')
   conta = ServiceAccountCredentials.from_json_keyfile_name(arquivo_credencials)
   api = gspread.authorize(conta)
   planilha = api.open_by_key('1cSPu6t84C8j_nI6UZXzkbmCwdFPmQWeyd9giVAtzLrQ')
@@ -79,12 +79,12 @@ def envia_email(palavras_raspadas):
   print('Enviando e-mail...')
   smtp_server = "smtp-relay.brevo.com"
   port = 587
-  email = "heloisav.x@gmail.com"  # MUDE AQUI
-  password = "BnSxEckMAy0pRQG5"  # MUDE AQUI
+  email = os.getenv('EMAIL')
+  password = os.getenv('SENHA_EMAIL')
 
   # Dados para o email que será enviado:
-  remetente = "heloisav.x@gmail.com"  # MUDE AQUI
-  destinatarios = ["heloisav.x@gmail.com"]  # MUDE AQUI
+  remetente = os.getenv('REMETENTE_EMAIL')
+  destinatarios = os.getenv('DESTINATARIO_EMAIL')
   titulo = f'Busca DOU do dia {data}'
   html = """
   <!DOCTYPE html>
