@@ -9,6 +9,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from dotenv import load_dotenv
+import os
 
 def raspa_dou():
   print('Raspando as notícias do dia...')
@@ -53,7 +55,7 @@ def procura_termos(conteudo_raspado):
 
     # Se nenhum resultado foi encontrado, exibe a mensagem e retorna um dicionário vazio
   if nenhum_resultado_encontrado:
-      print(f'Não houve publicação do Diário Oficial da União neste {dia_da_semana}, {data_formatada}. Volte novamente entre segunda e sexta-feira')
+      print(f'Não houve publicação do Diário Oficial da União no dia {data}. Volte novamente entre segunda e sexta-feira')
   print('Palavras chaves encontradas')
   return resultados_por_palavra
 palavras_raspadas = procura_termos(conteudo_raspado)
