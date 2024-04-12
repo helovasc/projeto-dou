@@ -11,6 +11,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from dotenv import load_dotenv
 import os
+load_dotenv()
 
 def raspa_dou():
   print('Raspando as notícias do dia...')
@@ -61,19 +62,14 @@ def procura_termos(conteudo_raspado):
 palavras_raspadas = procura_termos(conteudo_raspado)
 
 def salva_na_base(palavras_raspadas):
-    print('Salvando palavras na base de dados...')
-    # Carregar o conteúdo da variável de ambiente
-    json_content = os.getenv('CREDENCIAIS_JSON')
-    # Verificar se a variável de ambiente está definida
-    if json_content is None:
-        print('Variável de ambiente CREDENCIAIS_JSON não está definida.')
-        return
-    # Carregar as credenciais JSON
-    credentials = json.loads(json_content)
+print('Salvando palavras na base de dados...')
+    # Abrir o arquivo 'credenciais.json' e ler o conteúdo
+    with open('credenciais.json') as f:
+        credentials = json.load(f)
     # Criar as credenciais do serviço
     conta = ServiceAccountCredentials.from_json_keyfile_dict(credentials)
     # Autenticar com o Google Sheets API
-    api = gspread.authorize(conta)
+    api = gspread.authorize(conta) 
     # Abrir a planilha
     planilha = api.open_by_key('1cSPu6t84C8j_nI6UZXzkbmCwdFPmQWeyd9giVAtzLrQ')
     # Acessar a planilha desejada
