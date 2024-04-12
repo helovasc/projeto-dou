@@ -4,3 +4,4 @@ beautifulsoup4
 python-dotenv
 gspread
 babel
+google-auth
