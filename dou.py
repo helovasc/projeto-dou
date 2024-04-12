@@ -83,8 +83,8 @@ def envia_email(palavras_raspadas):
   password = os.getenv('SENHA_EMAIL')
 
   # Dados para o email que será enviado:
-  remetente = os.getenv('REMETENTE_EMAIL')
-  destinatarios = os.getenv('DESTINATARIO_EMAIL')
+  remetente = os.getenv('EMAIL')
+  destinatarios = os.getenv('EMAIL')
   titulo = f'Busca DOU do dia {data}'
   html = """
   <!DOCTYPE html>
