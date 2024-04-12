@@ -17,7 +17,7 @@ def raspa_dou():
   conteudo = json.loads(soup.find("script", {"id": "params"}).text)
   print('Notícias raspadas')
   return conteudo
-  conteudo_raspado = raspa_dou()
+conteudo_raspado = raspa_dou()
 
 def formata_data():
   print('Encontrando a data...')
@@ -27,7 +27,7 @@ def formata_data():
   data_formatada = data_atual.strftime("%d/%m/%Y")
   print('Data encontrada')
   return data_formatada
-  data = formata_data()
+data = formata_data()
 
 def procura_termos(conteudo_raspado):
   print('Buscando palavras-chave...')
@@ -56,7 +56,7 @@ def procura_termos(conteudo_raspado):
       print(f'Não houve publicação do Diário Oficial da União neste {dia_da_semana}, {data_formatada}. Volte novamente entre segunda e sexta-feira')
   print('Palavras chaves encontradas')
   return resultados_por_palavra
-  palavras_raspadas = procura_termos(conteudo_raspado)
+palavras_raspadas = procura_termos(conteudo_raspado)
 
 def salva_na_base(palavras_raspadas):
   print('Salvando palavras na base de dados...')
@@ -126,14 +126,6 @@ def envia_email(palavras_raspadas):
   server.sendmail(remetente, destinatarios, mensagem.as_string())
   print('E-mail enviado')
 
-def aciona_bot():
-  raspa_dou()
-  formata_data()
-  procura_termos(conteudo_raspado)
-  salva_na_base(palavras_raspadas)
-  envia_email(palavras_raspadas)
-  print('Tudo ok!')
-aciona_bot()
 
 
 
