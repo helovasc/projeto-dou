@@ -83,7 +83,7 @@ print('Salvando palavras na base de dados...')
             resumo = item['abstract']
             palavra_chave = palavra
             sheet.append_row([data, palavra_chave, titulo, url, resumo])
-    print('Resultados salvos')
+  print('Resultados salvos')
 salva_na_base(palavras_raspadas)
 
 def envia_email(palavras_raspadas):
