@@ -61,21 +61,34 @@ def procura_termos(conteudo_raspado):
 palavras_raspadas = procura_termos(conteudo_raspado)
 
 def salva_na_base(palavras_raspadas):
-  print('Salvando palavras na base de dados...')
-  arquivo_credencials = os.getenv('CHAVE_CREDENCIAIS')
-  conta = ServiceAccountCredentials.from_json_keyfile_name(arquivo_credencials)
-  api = gspread.authorize(conta)
-  planilha = api.open_by_key('1cSPu6t84C8j_nI6UZXzkbmCwdFPmQWeyd9giVAtzLrQ')
-  sheet = planilha.worksheet('Página1')
-  for palavra, lista_resultados in palavras_raspadas.items():
-    for item in lista_resultados:
-        data = item['date']
-        titulo = item['title']
-        url = item['href']
-        resumo = item['abstract']
-        palavra_chave = palavra
-        sheet.append_row([data, palavra_chave, titulo, url, resumo])
-  print('Resultados salvos')
+    print('Salvando palavras na base de dados...')
+    # Carregar o conteúdo da variável de ambiente
+    json_content = os.getenv('CREDENCIAIS_JSON')
+    # Verificar se a variável de ambiente está definida
+    if json_content is None:
+        print('Variável de ambiente CREDENCIAIS_JSON não está definida.')
+        return
+    # Carregar as credenciais JSON
+    credentials = json.loads(json_content)
+    # Criar as credenciais do serviço
+    conta = ServiceAccountCredentials.from_json_keyfile_dict(credentials)
+    # Autenticar com o Google Sheets API
+    api = gspread.authorize(conta)
+    # Abrir a planilha
+    planilha = api.open_by_key('1cSPu6t84C8j_nI6UZXzkbmCwdFPmQWeyd9giVAtzLrQ')
+    # Acessar a planilha desejada
+    sheet = planilha.worksheet('Página1')
+    # Iterar sobre os resultados e salvar na planilha
+    for palavra, lista_resultados in palavras_raspadas.items():
+        for item in lista_resultados:
+            data = item['date']
+            titulo = item['title']
+            url = item['href']
+            resumo = item['abstract']
+            palavra_chave = palavra
+            sheet.append_row([data, palavra_chave, titulo, url, resumo])
+    print('Resultados salvos')
+salva_na_base(palavras_raspadas)
 
 def envia_email(palavras_raspadas):
   print('Enviando e-mail...')
@@ -127,7 +140,7 @@ def envia_email(palavras_raspadas):
   # Enviando o email pela conexão já estabelecida:
   server.sendmail(remetente, destinatarios, mensagem.as_string())
   print('E-mail enviado')
-
+envia_email(palavras_raspadas)
 
 
 
