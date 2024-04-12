@@ -65,7 +65,7 @@ def salva_na_base(palavras_raspadas):
   print('Salvando palavras na base de dados...')
   # Abrir o arquivo 'credenciais.json' e ler o conteúdo
   with open('credenciais.json') as f:
-  credentials = json.load(f)
+    credentials = json.load(f)
   # Criar as credenciais do serviço
   conta = ServiceAccountCredentials.from_json_keyfile_dict(credentials)
   # Autenticar com o Google Sheets API
