@@ -89,57 +89,59 @@ def salva_na_base(palavras_raspadas):
 salva_na_base(palavras_raspadas)
 
 def envia_email(palavras_raspadas):
-  print('Enviando e-mail...')
-  smtp_server = "smtp-relay.brevo.com"
-  port = 587
-  email = os.getenv('EMAIL')
-  password = os.getenv('SENHA_EMAIL')
+    print('Enviando e-mail...')
+    smtp_server = "smtp-relay.brevo.com"
+    port = 587
+    email = os.getenv('EMAIL')
+    password = os.getenv('SENHA_EMAIL')
 
-  # Dados para o email que será enviado:
-  remetente = 'Busca_DOU@email.com'
-  destinatarios = os.getenv('DESTINATARIOS').split(',')
-  destinatarios_formatados = [email.strip() for email in destinatarios]
-  titulo = f'Busca DOU do dia {data}'
-  html = """
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <title>Busca DOU</title>
-    </head>
-    <body>
-      <h1>Consulta ao Diário Oficial da União</h1>
-      """
-  html += f'<p> As matérias encontradas no dia {data} foram:'
+    # Dados para o email que será enviado:
+    remetente = 'Busca_DOU@email.com'
+    destinatarios = os.getenv('DESTINATARIOS').split(',')
+    destinatarios_formatados = [email.strip() for email in destinatarios]
+    titulo = f'Busca DOU do dia {data}'
+    html = """
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Busca DOU</title>
+        </head>
+        <body>
+            <h1>Consulta ao Diário Oficial da União</h1>
+    """
+    html += f'<p> As matérias encontradas no dia {data} foram:'
 
-  for palavra, lista_resultados in palavras_raspadas.items():
-      html += f"<h2>{palavra}</h2>\n"
-      if lista_resultados:
-          html += "<ul>\n"
-          for resultado in lista_resultados:
-              html += f"<li><a href='{resultado['href']}'>{resultado['title']}</a></li>\n"
-          html += "</ul>\n"
-      else:
-          html += "<p>Nenhum resultado encontrado para esta palavra-chave.</p>\n"
+    for palavra, lista_resultados in palavras_raspadas.items():
+        html += f"<h2>{palavra}</h2>\n"
+        if lista_resultados:
+            html += "<ul>\n"
+            for resultado in lista_resultados:
+                html += f"<li><a href='{resultado['href']}'>{resultado['title']}</a></li>\n"
+            html += "</ul>\n"
+        else:
+            html += "<p>Nenhum resultado encontrado para esta palavra-chave.</p>\n"
 
-  html += "</body>\n</html>"
+    html += "</body>\n</html>"
 
-  print('Iniciando conexão com o servidor...')
-  server = smtplib.SMTP(smtp_server, port)  # Inicia a conexão com o servidor
-  server.starttls()  # Altera a comunicação para utilizar criptografia
-  server.login(email, password)  # Autentica
+    print('Iniciando conexão com o servidor...')
+    
+    try:
+        server = smtplib.SMTP(smtp_server, port)  # Inicia a conexão com o servidor
+        server.starttls()  # Altera a comunicação para utilizar criptografia
+        server.login(email, password)  # Autentica
 
-  # Preparando o objeto da mensagem ("documento" do email):
-  mensagem = MIMEMultipart()
-  mensagem["From"] = remetente
-  mensagem["To"] = ",".join(destinatarios_formatados)
-  mensagem["Subject"] = titulo
-  conteudo_html = MIMEText(html, "html")  # Adiciona a versão em HTML
-  mensagem.attach(conteudo_html)
+        # Preparando o objeto da mensagem ("documento" do email):
+        mensagem = MIMEMultipart()
+        mensagem["From"] = remetente
+        mensagem["To"] = ",".join(destinatarios_formatados)
+        mensagem["Subject"] = titulo
+        conteudo_html = MIMEText(html, "html")  # Adiciona a versão em HTML
+        mensagem.attach(conteudo_html)
 
-  # Enviando o email pela conexão já estabelecida:
-  server.sendmail(remetente, destinatarios_formatados, mensagem.as_string())
-  print('E-mail enviado')
-envia_email(palavras_raspadas)
-
-
-
+        # Enviando o email pela conexão já estabelecida:
+        server.sendmail(remetente, destinatarios_formatados, mensagem.as_string())
+        print('E-mail enviado')
+    except Exception as e:
+        print(f"Erro ao enviar e-mail: {e}")
+    finally:
+        server.quit()
