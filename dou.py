@@ -35,7 +35,7 @@ data = formata_data()
 def procura_termos(conteudo_raspado):
   print('Buscando palavras-chave...')
 
-  palavras_chave = ['Comunicação', 'Secretaria de Prêmios e Apostas', 'Aposta de Quota Fixa', 'Apostas', 'Cassino', 'Manipulação de Resultados',
+  palavras_chave = ['Secretaria de Prêmios e Apostas', 'Aposta de Quota Fixa', 'Apostas', 'Cassino', 'Manipulação de Resultados',
                   'iGaming', 'Fantasy Games']
   URL_BASE = 'https://www.in.gov.br/en/web/dou/-/'
   resultados_por_palavra = {palavra: [] for palavra in palavras_chave}
@@ -57,9 +57,11 @@ def procura_termos(conteudo_raspado):
     # Se nenhum resultado foi encontrado, exibe a mensagem e retorna um dicionário vazio
   if nenhum_resultado_encontrado:
       print(f'Não houve publicação do Diário Oficial da União no dia {data}. Volte novamente entre segunda e sexta-feira')
+      return
   print('Palavras chaves encontradas')
   return resultados_por_palavra
 palavras_raspadas = procura_termos(conteudo_raspado)
+
 
 def salva_na_base(palavras_raspadas):
   print('Salvando palavras na base de dados...')
@@ -94,8 +96,8 @@ def envia_email(palavras_raspadas):
   password = os.getenv('SENHA_EMAIL')
 
   # Dados para o email que será enviado:
-  remetente = os.getenv('EMAIL')
-  destinatarios = os.getenv('EMAIL')
+  remetente = 'Busca_DOU@email.com'
+  destinatarios = ['heloisa.vasconcelos@altsdigital.com', 'heloisav.x@gmail.com']
   titulo = f'Busca DOU do dia {data}'
   html = """
   <!DOCTYPE html>
