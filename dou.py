@@ -73,7 +73,7 @@ def salva_na_base(palavras_raspadas):
   # Autenticar com o Google Sheets API
   api = gspread.authorize(conta) 
   # Abrir a planilha
-  planilha = api.open_by_key('1cSPu6t84C8j_nI6UZXzkbmCwdFPmQWeyd9giVAtzLrQ')
+  planilha = api.open_by_key(os.getenv('PLANILHA'))
   # Acessar a planilha desejada
   sheet = planilha.worksheet('Página1')
   # Iterar sobre os resultados e salvar na planilha
@@ -97,7 +97,8 @@ def envia_email(palavras_raspadas):
 
   # Dados para o email que será enviado:
   remetente = 'Busca_DOU@email.com'
-  destinatarios = ['heloisa.vasconcelos@altsdigital.com', 'ana.almeida@altsdigital.com', 'amanda.jb@altsdigital.com']
+  destinatarios = os.getenv('DESTINATARIOS').split(',')
+  destinatarios_formatados = [f"TO:{email.strip()}" for email in destinatarios]
   titulo = f'Busca DOU do dia {data}'
   html = """
   <!DOCTYPE html>
@@ -130,7 +131,7 @@ def envia_email(palavras_raspadas):
   # Preparando o objeto da mensagem ("documento" do email):
   mensagem = MIMEMultipart()
   mensagem["From"] = remetente
-  mensagem["To"] = ",".join(destinatarios)
+  mensagem["To"] = ",".join(destinatarios_formatados)
   mensagem["Subject"] = titulo
   conteudo_html = MIMEText(html, "html")  # Adiciona a versão em HTML
   mensagem.attach(conteudo_html)
