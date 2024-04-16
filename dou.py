@@ -97,8 +97,7 @@ def envia_email(palavras_raspadas):
 
     # Dados para o email que será enviado:
     remetente = 'Busca_DOU@email.com'
-    destinatarios = os.getenv('DESTINATARIOS').split(',')
-    destinatarios_formatados = [email.strip() for email in destinatarios]
+    destinatarios = os.environ['DESTINATARIOS'].split(',')
     titulo = f'Busca DOU do dia {data}'
     html = """
     <!DOCTYPE html>
@@ -133,15 +132,16 @@ def envia_email(palavras_raspadas):
         # Preparando o objeto da mensagem ("documento" do email):
         mensagem = MIMEMultipart()
         mensagem["From"] = remetente
-        mensagem["To"] = ",".join(destinatarios_formatados)
+        mensagem["To"] = ",".join(destinatarios)
         mensagem["Subject"] = titulo
         conteudo_html = MIMEText(html, "html")  # Adiciona a versão em HTML
         mensagem.attach(conteudo_html)
 
         # Enviando o email pela conexão já estabelecida:
-        server.sendmail(remetente, destinatarios_formatados, mensagem.as_string())
+        server.sendmail(remetente, destinatarios, mensagem.as_string())
         print('E-mail enviado')
     except Exception as e:
         print(f"Erro ao enviar e-mail: {e}")
     finally:
         server.quit()
+envia_email(palavras_raspadas)
