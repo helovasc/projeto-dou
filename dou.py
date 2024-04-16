@@ -98,7 +98,7 @@ def envia_email(palavras_raspadas):
   # Dados para o email que será enviado:
   remetente = 'Busca_DOU@email.com'
   destinatarios = os.getenv('DESTINATARIOS').split(',')
-  destinatarios_formatados = [f"TO:{email.strip()}" for email in destinatarios]
+  destinatarios_formatados = [email.strip() for email in destinatarios]
   titulo = f'Busca DOU do dia {data}'
   html = """
   <!DOCTYPE html>
