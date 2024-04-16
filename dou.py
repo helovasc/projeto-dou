@@ -97,7 +97,7 @@ def envia_email(palavras_raspadas):
 
   # Dados para o email que será enviado:
   remetente = 'Busca_DOU@email.com'
-  destinatarios = ['heloisa.vasconcelos@altsdigital.com', 'heloisav.x@gmail.com']
+  destinatarios = ['heloisa.vasconcelos@altsdigital.com', 'ana.almeida@altsdigital.com', 'amanda.jb@altsdigital.com']
   titulo = f'Busca DOU do dia {data}'
   html = """
   <!DOCTYPE html>
