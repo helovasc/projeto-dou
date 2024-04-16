@@ -137,7 +137,7 @@ def envia_email(palavras_raspadas):
   mensagem.attach(conteudo_html)
 
   # Enviando o email pela conexão já estabelecida:
-  server.sendmail(remetente, destinatarios, mensagem.as_string())
+  server.sendmail(remetente, destinatarios_formatados, mensagem.as_string())
   print('E-mail enviado')
 envia_email(palavras_raspadas)
 
