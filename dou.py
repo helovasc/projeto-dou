@@ -62,59 +62,54 @@ def procura_termos(conteudo_raspado):
   return resultados_por_palavra
 palavras_raspadas = procura_termos(conteudo_raspado)
 
-
 def salva_na_base(palavras_raspadas):
-  if palavras_raspadas == []:
-    print ('Sem palavras encontradas')
-  else:
+    if not palavras_raspadas:
+        print('Sem palavras encontradas')
+        return
+
     print('Salvando palavras na base de dados...')
-    # Abrir o arquivo 'credenciais.json' e ler o conteúdo
     with open('credenciais.json') as f:
-      credentials = json.load(f)
-    # Criar as credenciais do serviço
+        credentials = json.load(f)
+
     conta = ServiceAccountCredentials.from_json_keyfile_dict(credentials)
-    # Autenticar com o Google Sheets API
-    api = gspread.authorize(conta) 
-    # Abrir a planilha
+    api = gspread.authorize(conta)
     planilha = api.open_by_key(os.getenv('PLANILHA'))
-    # Acessar a planilha desejada
     sheet = planilha.worksheet('Página1')
-    # Iterar sobre os resultados e salvar na planilha
+
     for palavra, lista_resultados in palavras_raspadas.items():
-      for item in lista_resultados:
-        data = item['date']
-        titulo = item['title']
-        url = item['href']
-        resumo = item['abstract']
-        palavra_chave = palavra
-        sheet.append_row([data, palavra_chave, titulo, url, resumo])
+        for item in lista_resultados:
+            data = item['date']
+            titulo = item['title']
+            url = item['href']
+            resumo = item['abstract']
+            palavra_chave = palavra
+            sheet.append_row([data, palavra_chave, titulo, url, resumo])
     print('Resultados salvos')
-salva_na_base(palavras_raspadas)
 
 def envia_email(palavras_raspadas):
-  if palavras_raspadas == []:
-    print('Sem palavras encontradas')
-  else:
+    if not palavras_raspadas:
+        print('Sem palavras encontradas')
+        return
+
     print('Enviando e-mail...')
     smtp_server = "smtp-relay.brevo.com"
     port = 587
     email = os.getenv('EMAIL')
     password = os.getenv('SENHA_EMAIL')
 
-    # Dados para o email que será enviado:
     remetente = 'Busca_DOU@email.com'
-    destinatarios = os.environ['DESTINATARIOS'].split(',')
+    destinatarios = os.getenv('DESTINATARIOS').split(',')
+    data = datetime.now().strftime('%d/%m/%Y')
     titulo = f'Busca DOU do dia {data}'
-    html = """
-    <!DOCTYPE html>
+    html = f"""<!DOCTYPE html>
     <html>
         <head>
             <title>Busca DOU</title>
         </head>
         <body>
             <h1>Consulta ao Diário Oficial da União</h1>
+            <p>As matérias encontradas no dia {data} foram:</p>
     """
-    html += f'<p> As matérias encontradas no dia {data} foram:'
 
     for palavra, lista_resultados in palavras_raspadas.items():
         html += f"<h2>{palavra}</h2>\n"
@@ -128,26 +123,26 @@ def envia_email(palavras_raspadas):
 
     html += "</body>\n</html>"
 
-    print('Iniciando conexão com o servidor...')
-    
     try:
-        server = smtplib.SMTP(smtp_server, port)  # Inicia a conexão com o servidor
-        server.starttls()  # Altera a comunicação para utilizar criptografia
-        server.login(email, password)  # Autentica
+        server = smtplib.SMTP(smtp_server, port)
+        server.starttls()
+        server.login(email, password)
 
-        # Preparando o objeto da mensagem ("documento" do email):
         mensagem = MIMEMultipart()
         mensagem["From"] = remetente
         mensagem["To"] = ",".join(destinatarios)
         mensagem["Subject"] = titulo
-        conteudo_html = MIMEText(html, "html")  # Adiciona a versão em HTML
+        conteudo_html = MIMEText(html, "html")
         mensagem.attach(conteudo_html)
 
-        # Enviando o email pela conexão já estabelecida:
         server.sendmail(remetente, destinatarios, mensagem.as_string())
         print('E-mail enviado')
     except Exception as e:
         print(f"Erro ao enviar e-mail: {e}")
     finally:
         server.quit()
-envia_email(palavras_raspadas)
+
+if __name__ == "__main__":
+    palavras_raspadas = {}  # Substituir por dados reais
+    salva_na_base(palavras_raspadas)
+    envia_email(palavras_raspadas)
