@@ -52,7 +52,7 @@ def procura_termos(conteudo_raspado):
                 nenhum_resultado_encontrado = False
 
     if nenhum_resultado_encontrado:
-        print(f'As palavras-chave não foram encontradas no dia {formata_data()}. Volte novamente amanhã')
+        print(f'As palavras-chave não foram encontradas no dia {data}. Volte novamente amanhã')
         return {}
     print('Palavras-chave encontradas')
     return resultados_por_palavra
@@ -131,5 +131,6 @@ def envia_email(palavras_raspadas):
 if __name__ == "__main__":
     conteudo_raspado = raspa_dou()
     palavras_raspadas = procura_termos(conteudo_raspado)
+    data = formata_data()
     salva_na_base(palavras_raspadas)
     envia_email(palavras_raspadas)
