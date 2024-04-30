@@ -95,8 +95,15 @@ def envia_email(palavras_raspadas):
     destinatarios = os.getenv('DESTINATARIOS').split(',')
     data = date.today().strftime('%d/%m/%Y')
     titulo = f'Busca DOU do dia {data}'
-    html = "<!DOCTYPE html><html><head><title>Busca DOU</title></head><body><h1>Consulta ao Diário Oficial da União</h1><p>As matérias encontradas no dia {data} foram:</p>"
-
+    html = f"""<!DOCTYPE html>
+    <html>
+        <head>
+            <title>Busca DOU</title>
+        </head>
+        <body>
+            <h1>Consulta ao Diário Oficial da União</h1>
+            <p>As matérias encontradas no dia {data} foram:</p>
+    """
     for palavra, lista_resultados in palavras_raspadas.items():
         html += f"<h2>{palavra}</h2>\n"
         if lista_resultados:
