@@ -52,7 +52,7 @@ def procura_termos(conteudo_raspado):
                 nenhum_resultado_encontrado = False
 
     if nenhum_resultado_encontrado:
-        print(f'As palavras-chave não foram encontradas no dia {data}. Volte novamente amanhã')
+        print(f'As palavras-chave não foram encontradas. Volte novamente amanhã')
         return {}
     print('Palavras-chave encontradas')
     return resultados_por_palavra
