@@ -32,7 +32,7 @@ def formata_data():
 
 def procura_termos(conteudo_raspado):
     print('Buscando palavras-chave...')
-    palavras_chave = ['Regis Dudena', 'Loteria', 'Secretaria de Prêmios e Apostas', 'Aposta de Quota Fixa', 'Apostas', 'Cassino', 'Manipulação de Resultados', 'iGaming', 'Fantasy Games']
+    palavras_chave = ['Inteligência Artificial', 'IA', 'OpenIA']
     URL_BASE = 'https://www.in.gov.br/en/web/dou/-/'
     resultados_por_palavra = {palavra: [] for palavra in palavras_chave}
     nenhum_resultado_encontrado = True
