@@ -32,7 +32,7 @@ def formata_data():
 
 def procura_termos(conteudo_raspado):
     print('Buscando palavras-chave...')
-    palavras_chave = ['Inteligência Artificial', 'Data Center', 'OpenAI', 'Anthropic', 'Google', 'Wide Labs', 'Widelabs', 'Intel', 'NVIDIA', 'AMD', 'Tecent', 'Meta']
+    palavras_chave = ['Inteligência Artificial', 'Data Center', 'OpenAI', 'Chatgpt', 'Anthropic', 'Claude', 'Google', 'Alphabet', 'Palantir', 'Databricks', 'Wide Labs', 'Widelabs', 'Tencent', 'Deepseek', 'NVIDIA', 'AMD', 'Azure']
     URL_BASE = 'https://www.in.gov.br/en/web/dou/-/'
     resultados_por_palavra = {palavra: [] for palavra in palavras_chave}
     nenhum_resultado_encontrado = True
